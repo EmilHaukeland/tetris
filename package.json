@@ -6,7 +6,7 @@
 
     "repository": {
         "type": "git",
-        "url": ""
+        "url": "git@codebasehq.com:itoken/private/tetris.git"
     },
 
     "directories": {
