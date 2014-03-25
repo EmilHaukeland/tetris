@@ -1,0 +1,24 @@
+{
+    "name": "Tetris",
+    "description": "A tetris game",
+
+    "author": "Emil Haukeland <iam@emilhaukeland.com>",
+
+    "repository": {
+        "type": "git",
+        "url": ""
+    },
+
+    "directories": {
+        "source": "src",
+        "test": "tests"
+    },
+
+    "dependencies": {
+        "typescript": "0.9"
+    },
+
+    "devDependencies": {
+
+    }
+}
