@@ -1,1 +1,5 @@
+.tscache
 node_modules
+npm-debug.log
+tscommand*.txt
+dev
