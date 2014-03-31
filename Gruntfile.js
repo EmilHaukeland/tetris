@@ -11,6 +11,7 @@ module.exports = function (grunt) {
         'Runs development mode',
         [
             'clean:development',
+            'copy:development',
             'ts:development',
             'watch:development'
         ]

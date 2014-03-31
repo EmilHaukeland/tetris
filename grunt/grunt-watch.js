@@ -2,7 +2,11 @@ module.exports = function (grunt) {
 
     grunt.config('watch', {
         development: {
-            files: 'src/**/*.ts',
+            files: [
+                'src/**/*.ts',
+                'tests/**/*.ts'
+            ],
+
             tasks: [
                 'ts:development'
             ]
