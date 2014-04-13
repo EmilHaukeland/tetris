@@ -9,7 +9,7 @@
     <script type="text/javascript" src="src/Tetris.js"></script>
 
     <style>
-        pre {
+        #output {
             margin: 100px auto;
             border: 1px solid #000000;
             font-size: 50px;
@@ -38,6 +38,13 @@
             top: 300px;
             left: 680px;
         }
+
+        #nextPiece pre {
+            font-size: 20px;
+            line-height: 13px;
+            text-align: center;
+            padding: 5px;
+        }
     </style>
 </head>
 <body>
@@ -56,7 +63,7 @@
             screen = $('#output');
             $('#score').text(score = 0);
             viewMultiplier = $('#scoreMultiplier');
-            viewMultiplier.text(multiplier = 0);
+            viewMultiplier.text(multiplier = 1);
             setNextPiece(getRandomPiece());
 
             tetris = new Tetris(11, 20);
@@ -66,7 +73,8 @@
             });
 
             $(tetris).on('NoPiece', function() {
-                tetris.addPiece(getRandomPiece());
+                tetris.addPiece(nextPiece);
+                setNextPiece(getRandomPiece());
             });
 
             $(tetris).on('GameOver', function() {
@@ -191,7 +199,7 @@
         function setNextPiece(piece)
         {
             nextPiece = piece;
-
+            $('#nextPiece pre').text(nextPiece.toString());
         }
 
         $(document).ready(start);
