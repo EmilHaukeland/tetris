@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Tetris</title>
+    <script type="text/javascript" src="vendor/jquery/jquery.js"></script>
+    <script type="text/javascript" src="src/PiecePosition.js"></script>
+    <script type="text/javascript" src="src/Piece.js"></script>
+    <script type="text/javascript" src="src/Tetris.js"></script>
+
+    <style>
+        pre {
+            margin: 100px auto;
+            border: 1px solid #000000;
+            font-size: 50px;
+            line-height: 30px;
+            width: 330px;
+        }
+        #score {
+            position: absolute;
+            top: 100px;
+            left: 680px;
+            outline: 3px dotted #000;
+            padding: 20px;
+            width: 60px;
+            font-size: 30px;
+            text-align: right;
+        }
+
+        #message {
+            position: absolute;
+            top: 150px;
+            left: 680px;
+        }
+
+        #nextPiece {
+            position: absolute;
+            top: 300px;
+            left: 680px;
+        }
+    </style>
+</head>
+<body>
+    <script type="text/javascript">
+        var tetris = null;
+        var screen = null;
+        var score = null;
+        var message = '';
+        var nextPiece = null;
+        var viewMultiplier;
+        var multiplier = null;
+        $(document).keydown(boardControl);
+
+        function start()
+        {
+            screen = $('#output');
+            $('#score').text(score = 0);
+            viewMultiplier = $('#scoreMultiplier');
+            viewMultiplier.text(multiplier = 0);
+            setNextPiece(getRandomPiece());
+
+            tetris = new Tetris(11, 20);
+
+            $(tetris).on('Tick', function() {
+                updateScreen();
+            });
+
+            $(tetris).on('NoPiece', function() {
+                tetris.addPiece(getRandomPiece());
+            });
+
+            $(tetris).on('GameOver', function() {
+                message = ' Game Over ';
+                updateScreen();
+            });
+
+            $(tetris).on('LinesRemoved', updateScore);
+            tetris.addPiece(getRandomPiece());
+            tetris.startGame(Tetris.SPEED_NORMAL);
+        }
+
+        function getRandomPiece()
+        {
+            return new Piece(Math.floor(Math.random() * 7));
+        }
+
+        function boardControl(event) {
+            if(!tetris)
+            {
+                return;
+            }
+
+            switch(event.keyCode)
+            {
+                case 32: // Space
+                case 80: // P
+                    if(tetris.getGameState() == GameState.Running)
+                    {
+                        tetris.pauseGame();
+                        message = '   Pause  ';
+                    }
+                    else if(tetris.getGameState() == GameState.Paused)
+                    {
+                        tetris.resumeGame();
+                        message = null;
+                    }
+                    updateScreen();
+                    break;
+                case 78: // N
+                    if(tetris.getGameState() == GameState.GameOver)
+                    {
+                        start();
+                        message = '';
+                        break;
+                    }
+
+                    tetris.pauseGame();
+                    message = '   Pause  ';
+                    if(confirm('Are you sure?'))
+                    {
+                        start();
+                    }
+                    else
+                    {
+                        tetris.resumeGame();
+                    }
+                    message = null;
+                    break;
+                default:
+                    break;
+            }
+
+            if(tetris.getGameState() != GameState.Running)
+            {
+                return;
+            }
+
+            switch(event.keyCode)
+            {
+                case 40:
+                    tetris.tick();
+                    break;
+                case 39:
+                    tetris.movePiece(Direction.Right);
+                    break;
+                case 37:
+                    tetris.movePiece(Direction.Left);
+                    break;
+                case 38:
+                    tetris.rotatePiece();
+                    break;
+                default:
+                    break;
+            }
+
+            updateScreen();
+        }
+
+        function updateScore(event, linesRemoved)
+        {
+            if(linesRemoved > 1)
+            {
+                updateMultiplier(linesRemoved - 1);
+            }
+
+            score += linesRemoved * multiplier;
+            $('#score').text(score);
+        }
+
+        function updateMultiplier(increase)
+        {
+            multiplier += increase;
+            viewMultiplier.text(multiplier);
+        }
+
+        function updateScreen()
+        {
+            var newScreen = tetris.toString();
+
+            if(message)
+            {
+                newScreen = newScreen.split("\n");
+                newScreen[8] = newScreen[10] = '';
+                newScreen[9] = message;
+                newScreen = newScreen.join("\n");
+            }
+
+            screen.text(newScreen);
+        }
+
+        function setNextPiece(piece)
+        {
+            nextPiece = piece;
+
+        }
+
+        $(document).ready(start);
+    </script>
+
+    <pre id="output"></pre>
+    <span id="score"></span>
+    <span id="message">Multiplier: <span id="scoreMultiplier"></span></span>
+    <div id="nextPiece">
+        <span>Next piece:</span>
+        <pre></pre>
+    </div>
+</body>
+</html>
