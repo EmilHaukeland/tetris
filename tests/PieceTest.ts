@@ -26,6 +26,24 @@ describe('Piece tests', () =>
         expect(piece.toString()).toEqual(expectedShape.join("\n"));
     });
 
+    it('Can rotate around twice', () => {
+        var expectedShape:string[] = [
+            '***',
+            ' * '
+        ];
+
+        var piece = new Piece(PieceShape.T);
+        piece.rotate();
+        piece.rotate();
+        piece.rotate();
+        piece.rotate();
+        piece.rotate();
+        piece.rotate();
+        piece.rotate();
+        piece.rotate();
+        expect(piece.toString()).toEqual(expectedShape.join("\n"));
+    });
+
     it('Can construct T piece', () =>
     {
         var expectedShape:string[] = [
@@ -42,7 +60,6 @@ describe('Piece tests', () =>
         var expectedShape:string[] = [
             ' *',
             ' *',
-            ' *',
             '**'
         ];
 
@@ -53,7 +70,6 @@ describe('Piece tests', () =>
     it('Can construct L piece', () =>
     {
         var expectedShape:string[] = [
-            '* ',
             '* ',
             '* ',
             '**'
